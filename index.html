@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0f6b3d" />
+  <title>رحلتي مع القرآن</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon">📖</div>
+        <div>
+          <h1>رحلتي مع القرآن</h1>
+          <p>تعلّم • استمع • افهم • طبّق</p>
+        </div>
+      </div>
+
+      <div class="top-stats">
+        <div class="stat"><span>⭐</span><strong id="starsCount">0</strong><small>النجوم</small></div>
+        <div class="stat"><span>🏅</span><strong id="badgesCount">0</strong><small>الشارات</small></div>
+        <div class="stat"><span>📚</span><strong id="completedCount">0</strong><small>السور المكتملة</small></div>
+      </div>
+
+      <button class="icon-btn" id="menuBtn" aria-label="القائمة">☰</button>
+    </header>
+
+    <main>
+      <section class="hero-card">
+        <div class="hero-copy">
+          <span class="eyebrow">🌟 رحلتك الأولى</span>
+          <h2>رحلتي مع <span>سورة الناس</span></h2>
+          <p>استمع إلى السورة، تعلّم آياتها، افهم معانيها، ثم أتمّ الأنشطة واحصل على النجوم والمكافآت.</p>
+          <div class="hero-actions">
+            <button class="primary-btn" id="startJourneyBtn">🚀 ابدأ الرحلة</button>
+            <button class="secondary-btn" id="continueBtn">↩️ تابع من حيث توقفت</button>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="sun"></div>
+          <div class="cloud c1"></div>
+          <div class="cloud c2"></div>
+          <div class="quran-card">📖</div>
+          <div class="star s1">⭐</div>
+          <div class="star s2">⭐</div>
+          <div class="hills"></div>
+        </div>
+      </section>
+
+      <section class="dashboard-grid">
+        <aside class="side-panel">
+          <article class="panel-card">
+            <div class="panel-title">⭐ تقدمي في الرحلة</div>
+            <div class="surah-name">سورة الناس</div>
+            <div class="progress-wrap">
+              <div class="progress-bar"><span id="progressFill"></span></div>
+              <strong id="progressText">0%</strong>
+            </div>
+            <p id="progressDetail">0 من 8 محطات مكتملة</p>
+          </article>
+
+          <article class="panel-card">
+            <div class="panel-title">🏆 آخر إنجاز</div>
+            <div class="achievement" id="lastAchievement">
+              <div class="achievement-icon">✨</div>
+              <div>
+                <strong>ابدأ رحلتك الأولى</strong>
+                <p>أكمل أول محطة لتحصل على أول نجمة.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel-card">
+            <div class="panel-title">🎁 نجوم المكافآت</div>
+            <p>اجمع 25 نجمة لتحصل على مكافأة جديدة.</p>
+            <div class="reward-stars" id="rewardStars">☆☆☆☆☆</div>
+            <button class="text-btn" id="rewardsBtn">عرض المكافآت ←</button>
+          </article>
+        </aside>
+
+        <section class="content-area">
+          <div class="section-head">
+            <div>
+              <h3>اختر السورة التي تريد تعلمها</h3>
+              <p>تبدأ بسورة الناس، وتُفتح السور الأخرى تدريجيًا.</p>
+            </div>
+          </div>
+
+          <div class="surah-carousel" aria-label="اختيار السورة">
+            <button type="button" class="surah-carousel-arrow prev" id="surahPrev" aria-label="عرض السور السابقة" title="السور السابقة">❯</button>
+            <div class="surah-grid" id="surahGrid" tabindex="0"></div>
+            <button type="button" class="surah-carousel-arrow next" id="surahNext" aria-label="عرض السور التالية" title="السور التالية">❮</button>
+          </div>
+
+          <div class="journey-preview">
+            <div class="section-head">
+              <div>
+                <h3>محطات رحلة سورة الناس</h3>
+                <p>كل محطة قصيرة، واضحة، ومناسبة للصف الأول الابتدائي.</p>
+              </div>
+            </div>
+            <div class="stations-grid" id="stationsGrid"></div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="التنقل الرئيسي">
+      <button class="active" data-view="home">🏠<span>الرئيسية</span></button>
+      <button data-view="surahs">📚<span>السور</span></button>
+      <button data-view="activities">🎯<span>أنشطتي</span></button>
+      <button data-view="rewards">🏆<span>المكافآت</span></button>
+      <button data-view="certificate">📜<span>شهادتي</span></button>
+      <button data-view="help">❓<span>المساعدة</span></button>
+    </nav>
+  </div>
+
+
+  <dialog id="welcomeDialog" class="welcome-dialog">
+    <div class="welcome-card hero-entry-card">
+      <div class="welcome-stars">⭐ 🌙 ⭐</div>
+      <div class="welcome-book">📖</div>
+      <span class="eyebrow">رحلتي مع القرآن</span>
+
+      <div id="heroChoiceView">
+        <h2>من بطل الرحلة اليوم؟ 👋</h2>
+        <p>يمكنك المتابعة باسم البطل المحفوظ، أو اختيار اسم جديد.</p>
+
+        <div class="saved-hero-card" id="savedHeroCard" hidden>
+          <span class="saved-avatar">🌟</span>
+          <div>
+            <small>البطل المحفوظ</small>
+            <strong id="savedHeroName">بطل الرحلة</strong>
+          </div>
+        </div>
+
+        <div class="hero-entry-actions">
+          <button type="button" class="primary-btn" id="continueSavedHero" hidden>
+            🚀 متابعة بهذا الاسم
+          </button>
+          <button type="button" class="secondary-btn" id="chooseNewHero">
+            👤 تغيير / إدخال اسم البطل
+          </button>
+        </div>
+      </div>
+
+      <div id="heroNameView" hidden>
+        <h2>أهلًا يا بطل 🌟</h2>
+        <p>اكتب الاسم الذي تريد أن يظهر في رحلتك وشهادتك.</p>
+
+        <label for="heroNameStart">اسم البطل</label>
+        <input id="heroNameStart" type="text" maxlength="60" autocomplete="name" placeholder="اكتب اسم البطل هنا" />
+
+        <div class="welcome-error" id="welcomeError" hidden>اكتب اسم البطل أولًا 🌟</div>
+
+        <div class="hero-entry-actions">
+          <button type="button" class="primary-btn welcome-start" id="startHeroJourney">
+            🚀 ابدأ رحلتي
+          </button>
+          <button type="button" class="secondary-btn" id="backToHeroChoice">
+            ↩️ رجوع
+          </button>
+        </div>
+      </div>
+
+      <small class="privacy-note">يُحفظ الاسم والتقدم على هذا الجهاز فقط.</small>
+    </div>
+  </dialog>
+
+  <dialog id="journeyDialog" class="journey-dialog">
+    <form method="dialog" class="dialog-card">
+      <button class="close-btn" aria-label="إغلاق">✕</button>
+
+      <div class="dialog-head">
+        <div>
+          <span class="eyebrow">📖 المحطة الأولى</span>
+          <h2>أستمع وأقرأ — سورة الناس</h2>
+          <p>استمع إلى السورة كاملة، أو شغّل كل آية على حدة، ثم ردد خلف الشيخ.</p>
+        </div>
+        <div class="dialog-stars">⭐ <span id="dialogStars">0</span></div>
+      </div>
+
+      <div class="listening-progress">
+        <div>
+          <strong>تقدمي في الآيات</strong>
+          <span id="masteryText">0 من 6 آيات</span>
+        </div>
+        <div class="mastery-stars" id="masteryStars">☆☆☆☆☆☆</div>
+      </div>
+
+      <div class="audio-toolbar">
+        <button type="button" class="primary-btn" id="playFullSurah">▶️ استمع إلى السورة كاملة</button>
+        <button type="button" class="secondary-btn" id="pauseResumeAudio">⏸ إيقاف مؤقت</button>
+        <button type="button" class="secondary-btn" id="stopAudio">⏹ إيقاف</button>
+        <label class="repeat-toggle">
+          <input type="checkbox" id="repeatAyah" />
+          🔁 كرر الآية
+        </label>
+      </div>
+
+      <div class="now-playing" id="nowPlaying">
+        <span>🎧</span>
+        <div>
+          <strong>جاهز للاستماع</strong>
+          <p>اختر آية أو اضغط «استمع إلى السورة كاملة».</p>
+        </div>
+      </div>
+
+      <div class="ayahs" id="ayahsList"></div>
+
+      <div class="station-complete-card" id="stationCompleteCard" hidden>
+        <div class="celebrate">🌟</div>
+        <div>
+          <h3>رائع! أتممت آيات سورة الناس</h3>
+          <p>يمكنك الآن إنهاء محطة الاستماع والحصول على مكافأتك.</p>
+        </div>
+      </div>
+
+      <div class="dialog-footer">
+        <button type="button" class="secondary-btn" id="markStationDone" disabled>⭐ إنهاء محطة الاستماع</button>
+        <button value="close" class="primary-btn">العودة للرئيسية</button>
+      </div>
+    </form>
+  </dialog>
+
+
+  <dialog id="repeatDialog" class="journey-dialog">
+    <form method="dialog" class="dialog-card">
+      <button class="close-btn" aria-label="إغلاق">✕</button>
+
+      <div class="dialog-head">
+        <div>
+          <span class="eyebrow">🗣️ المحطة الثانية</span>
+          <h2>أردد — سورة الناس</h2>
+          <p>استمع إلى الآية، انتظر العد التنازلي، ثم رددها بصوتك.</p>
+        </div>
+        <div class="dialog-stars">⭐ <span id="repeatDialogStars">0</span></div>
+      </div>
+
+      <div class="listening-progress">
+        <div>
+          <strong>تقدمي في الترديد</strong>
+          <span id="repeatProgressText">0 من 6 آيات</span>
+        </div>
+        <div class="mastery-stars" id="repeatMasteryStars">☆☆☆☆☆☆</div>
+      </div>
+
+      <div class="repeat-stage">
+        <div class="repeat-step" id="repeatStepBadge">الآية 1 من 6</div>
+        <div class="repeat-ayah-number" id="repeatAyahNumber">1</div>
+        <div class="repeat-ayah-text" id="repeatAyahText">قُلْ أَعُوذُ بِرَبِّ النَّاسِ</div>
+
+        <div class="repeat-actions">
+          <button type="button" class="primary-btn" id="repeatListenBtn">🔊 استمع إلى الآية</button>
+          <button type="button" class="secondary-btn" id="repeatAgainBtn">🔁 استمع مرة أخرى</button>
+        </div>
+
+        <div class="repeat-instruction" id="repeatInstruction">
+          <div class="repeat-icon">🎧</div>
+          <div>
+            <strong>استمع أولًا</strong>
+            <p>بعد انتهاء التلاوة سيبدأ العد التنازلي تلقائيًا.</p>
+          </div>
+        </div>
+
+        <div class="countdown-box" id="countdownBox" hidden>
+          <span id="countdownNumber">3</span>
+          <small>استعد للترديد</small>
+        </div>
+
+        <div class="your-turn" id="yourTurnBox" hidden>
+          <div class="mic-pulse">🎙️</div>
+          <div>
+            <strong>الآن دورك… ردد الآية</strong>
+            <p>ردد بهدوء ووضوح، ثم اضغط الزر عندما تنتهي.</p>
+          </div>
+        </div>
+
+        <button type="button" class="master-repeat-btn" id="markRepeatedBtn" disabled>
+          ⭐ رددت الآية
+        </button>
+
+        <div class="repeat-nav">
+          <button type="button" class="secondary-btn" id="prevRepeatAyah">السابق</button>
+          <button type="button" class="secondary-btn" id="nextRepeatAyah">التالي</button>
+        </div>
+      </div>
+
+      <div class="station-complete-card" id="repeatStationCompleteCard" hidden>
+        <div class="celebrate">🏆</div>
+        <div>
+          <h3>أحسنت! أتممت ترديد سورة الناس</h3>
+          <p>أكملت الآيات الست، ويمكنك الآن إنهاء المحطة والحصول على مكافأتك.</p>
+        </div>
+      </div>
+
+      <div class="dialog-footer">
+        <button type="button" class="secondary-btn" id="finishRepeatStation" disabled>⭐ إنهاء محطة «أردد»</button>
+        <button value="close" class="primary-btn">العودة للرئيسية</button>
+      </div>
+    </form>
+  </dialog>
+
+
+  <dialog id="understandDialog" class="journey-dialog">
+    <form method="dialog" class="dialog-card">
+      <button class="close-btn" aria-label="إغلاق">✕</button>
+      <div class="dialog-head">
+        <div>
+          <span class="eyebrow">💡 المحطة الثالثة</span>
+          <h2>أفهم — سورة الناس</h2>
+          <p>نتعرف على المعنى المبسط لكل آية، ثم نجيب عن سؤال صغير.</p>
+        </div>
+        <div class="dialog-stars">⭐ <span id="understandDialogStars">0</span></div>
+      </div>
+
+      <div class="listening-progress">
+        <div><strong>تقدمي في الفهم</strong><span id="understandProgressText">0 من 6 آيات</span></div>
+        <div class="mastery-stars" id="understandStars">☆☆☆☆☆☆</div>
+      </div>
+
+      <div class="learning-card">
+        <div class="learning-top">
+          <span class="learning-number" id="understandAyahNumber">1</span>
+          <div>
+            <small id="understandStep">الآية 1 من 6</small>
+            <div class="learning-ayah" id="understandAyahText"></div>
+          </div>
+        </div>
+
+        <div class="meaning-card">
+          <span class="meaning-icon" id="meaningIcon">🤲</span>
+          <div>
+            <strong>المعنى ببساطة</strong>
+            <p id="meaningText"></p>
+          </div>
+        </div>
+
+        <div class="understand-question">
+          <strong id="understandQuestion"></strong>
+          <div class="choice-grid" id="understandChoices"></div>
+          <div class="answer-feedback" id="understandFeedback" hidden></div>
+        </div>
+
+        <div class="repeat-nav">
+          <button type="button" class="secondary-btn" id="prevUnderstand">السابق</button>
+          <button type="button" class="secondary-btn" id="nextUnderstand">التالي</button>
+        </div>
+      </div>
+
+      <div class="station-complete-card" id="understandCompleteCard" hidden>
+        <div class="celebrate">🌟</div>
+        <div><h3>رائع! فهمت معاني سورة الناس</h3><p>أكملت بطاقات الفهم الست. أحسنت!</p></div>
+      </div>
+
+      <div class="dialog-footer">
+        <button type="button" class="secondary-btn" id="finishUnderstand" disabled>⭐ إنهاء محطة «أفهم»</button>
+        <button value="close" class="primary-btn">العودة للرئيسية</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="matchDialog" class="journey-dialog">
+    <form method="dialog" class="dialog-card">
+      <button class="close-btn" aria-label="إغلاق">✕</button>
+      <div class="dialog-head">
+        <div>
+          <span class="eyebrow">🧩 المحطة الرابعة</span>
+          <h2>أطابق — سورة الناس</h2>
+          <p>اختر البطاقة التي تطابق معنى العبارة. لديك ست جولات قصيرة.</p>
+        </div>
+        <div class="dialog-stars">⭐ <span id="matchDialogStars">0</span></div>
+      </div>
+
+      <div class="listening-progress">
+        <div><strong>تقدمي في المطابقة</strong><span id="matchProgressText">0 من 6</span></div>
+        <div class="mastery-stars" id="matchStars">☆☆☆☆☆☆</div>
+      </div>
+
+      <div class="match-game">
+        <div class="match-round" id="matchRound">الجولة 1 من 6</div>
+        <div class="match-prompt">
+          <span id="matchPromptIcon">🤲</span>
+          <div><small>طابق هذه العبارة</small><strong id="matchPrompt"></strong></div>
+        </div>
+        <div class="match-options" id="matchOptions"></div>
+        <div class="answer-feedback" id="matchFeedback" hidden></div>
+        <button type="button" class="primary-btn" id="nextMatch" hidden>الجولة التالية ←</button>
+      </div>
+
+      <div class="station-complete-card" id="matchCompleteCard" hidden>
+        <div class="celebrate">🏆</div>
+        <div><h3>بطل المطابقة!</h3><p>أكملت الجولات الست وربطت الكلمات بمعانيها.</p></div>
+      </div>
+
+      <div class="dialog-footer">
+        <button type="button" class="secondary-btn" id="finishMatch" disabled>⭐ إنهاء محطة «أطابق»</button>
+        <button value="close" class="primary-btn">العودة للرئيسية</button>
+      </div>
+    </form>
+  </dialog>
+
+
+  <dialog id="orderDialog" class="journey-dialog">
+    <form method="dialog" class="dialog-card">
+      <button class="close-btn" aria-label="إغلاق">✕</button>
+
+      <div class="dialog-head">
+        <div>
+          <span class="eyebrow">🔢 المحطة الخامسة</span>
+          <h2>أرتب — سورة الناس</h2>
+          <p>رتّب الآيات في أماكنها الصحيحة بالضغط على البطاقات بالترتيب.</p>
+        </div>
+        <div class="dialog-stars">⭐ <span id="orderDialogStars">0</span></div>
+      </div>
+
+      <div class="listening-progress">
+        <div>
+          <strong>تقدمي في الترتيب</strong>
+          <span id="orderProgressText">0 من 6 آيات</span>
+        </div>
+        <div class="mastery-stars" id="orderStars">☆☆☆☆☆☆</div>
+      </div>
+
+      <div class="order-game">
+        <div class="order-instruction">
+          <span>🧠</span>
+          <div>
+            <strong>ابدأ بالآية الأولى</strong>
+            <p>اضغط على الآيات بالترتيب الصحيح من 1 إلى 6.</p>
+          </div>
+        </div>
+
+        <div class="order-targets" id="orderTargets"></div>
+        <div class="order-pool" id="orderPool"></div>
+
+        <div class="answer-feedback" id="orderFeedback" hidden></div>
+
+        <div class="order-actions">
+          <button type="button" class="secondary-btn" id="resetOrder">🔄 أعد المحاولة</button>
+          <button type="button" class="primary-btn" id="checkOrder" disabled>✅ تحقق من الترتيب</button>
+        </div>
+      </div>
+
+      <div class="station-complete-card" id="orderCompleteCard" hidden>
+        <div class="celebrate">🏆</div>
+        <div>
+          <h3>رائع! رتبت سورة الناس</h3>
+          <p>أكملت ترتيب الآيات الست بالترتيب الصحيح.</p>
+        </div>
+      </div>
+
+      <div class="dialog-footer">
+        <button type="button" class="secondary-btn" id="finishOrder" disabled>⭐ إنهاء محطة «أرتب»</button>
+        <button value="close" class="primary-btn">العودة للرئيسية</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="practiceDialog" class="journey-dialog">
+    <form method="dialog" class="dialog-card">
+      <button class="close-btn" aria-label="إغلاق">✕</button>
+
+      <div class="dialog-head">
+        <div>
+          <span class="eyebrow">🎯 المحطة السادسة</span>
+          <h2>أتدرب — سورة الناس</h2>
+          <p>تحديات قصيرة ومتنوعة: اختيار، إكمال، وتحديد الآية المناسبة.</p>
+        </div>
+        <div class="dialog-stars">⭐ <span id="practiceDialogStars">0</span></div>
+      </div>
+
+      <div class="listening-progress">
+        <div>
+          <strong>تقدمي في التدريب</strong>
+          <span id="practiceProgressText">0 من 6 تحديات</span>
+        </div>
+        <div class="mastery-stars" id="practiceStars">☆☆☆☆☆☆</div>
+      </div>
+
+      <div class="practice-card">
+        <div class="practice-head">
+          <span class="practice-badge" id="practiceType">اختيار</span>
+          <span id="practiceRound">التحدي 1 من 6</span>
+        </div>
+
+        <div class="practice-icon" id="practiceIcon">🎯</div>
+        <h3 id="practiceQuestion"></h3>
+        <div class="choice-grid" id="practiceChoices"></div>
+        <div class="answer-feedback" id="practiceFeedback" hidden></div>
+
+        <button type="button" class="primary-btn" id="nextPractice" hidden>التحدي التالي ←</button>
+      </div>
+
+      <div class="station-complete-card" id="practiceCompleteCard" hidden>
+        <div class="celebrate">🌟</div>
+        <div>
+          <h3>أحسنت! أتممت التدريب</h3>
+          <p>أنجزت التحديات الست بنجاح.</p>
+        </div>
+      </div>
+
+      <div class="dialog-footer">
+        <button type="button" class="secondary-btn" id="finishPractice" disabled>⭐ إنهاء محطة «أتدرب»</button>
+        <button value="close" class="primary-btn">العودة للرئيسية</button>
+      </div>
+    </form>
+  </dialog>
+
+
+  <dialog id="quizDialog" class="journey-dialog">
+    <form method="dialog" class="dialog-card">
+      <button class="close-btn" aria-label="إغلاق">✕</button>
+
+      <div class="dialog-head">
+        <div>
+          <span class="eyebrow">✅ المحطة السابعة</span>
+          <h2>أختبر نفسي — سورة الناس</h2>
+          <p>اختبار قصير مناسب لكل سورة. تحتاج إلى 75% على الأقل لاجتياز المحطة.</p>
+        </div>
+        <div class="dialog-stars">⭐ <span id="quizDialogStars">0</span></div>
+      </div>
+
+      <div class="quiz-status">
+        <div><strong id="quizRound">السؤال 1</strong><span id="quizScoreLive">النتيجة: 0</span></div>
+        <div class="quiz-progress"><span id="quizProgressFill"></span></div>
+      </div>
+
+      <div class="quiz-card" id="quizCard">
+        <div class="quiz-icon" id="quizIcon">✅</div>
+        <span class="practice-badge" id="quizType">اختيار</span>
+        <h3 id="quizQuestion"></h3>
+        <div class="choice-grid" id="quizChoices"></div>
+        <div class="answer-feedback" id="quizFeedback" hidden></div>
+        <button type="button" class="primary-btn" id="nextQuiz" hidden>السؤال التالي ←</button>
+      </div>
+
+      <div class="quiz-result" id="quizResult" hidden>
+        <div class="result-medal" id="quizResultMedal">🏆</div>
+        <h3 id="quizResultTitle"></h3>
+        <p id="quizResultText"></p>
+        <div class="result-score"><span id="quizFinalScore">0</span></div>
+        <button type="button" class="secondary-btn" id="retryQuiz">🔄 أعد الاختبار</button>
+      </div>
+
+      <div class="dialog-footer">
+        <button type="button" class="secondary-btn" id="finishQuiz" disabled>⭐ إنهاء محطة «أختبر نفسي»</button>
+        <button value="close" class="primary-btn">العودة للرئيسية</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="certificateDialog" class="journey-dialog certificate-dialog">
+    <form method="dialog" class="dialog-card certificate-shell">
+      <button class="close-btn no-print" aria-label="إغلاق">✕</button>
+
+      <div class="certificate-setup no-print">
+        <div>
+          <span class="eyebrow">📜 المحطة الثامنة</span>
+          <h2>شهادتي</h2>
+          <p>اكتب اسم التلميذ كما تريد أن يظهر في الشهادة، ثم اضغط «تحديث الشهادة».</p>
+        </div>
+        <div class="certificate-form-row">
+          <input id="studentNameInput" type="text" maxlength="60" placeholder="اكتب اسم البطل هنا" />
+          <button type="button" class="secondary-btn" id="updateCertificate">تحديث الشهادة</button>
+          <button type="button" class="secondary-btn" id="changeHeroName">👤 تغيير اسم البطل</button>
+        </div>
+      </div>
+
+      <section id="printableCertificate" class="certificate-paper">
+        <div class="certificate-border">
+          <div class="certificate-top">
+            <div class="cert-star">⭐</div>
+            <div>
+              <div class="cert-platform">رحلتي مع القرآن</div>
+              <div class="cert-subtitle">التربية الإسلامية — الصف الأول الابتدائي</div>
+            </div>
+            <div class="cert-book">📖</div>
+          </div>
+
+          <div class="cert-ribbon">شهادة إنجاز</div>
+
+          <p class="cert-intro">تُمنح هذه الشهادة إلى بطل الرحلة</p>
+          <div class="hero-name-label">اسم البطل</div>
+          <h1 id="certificateStudentName">اكتب اسم البطل</h1>
+          <p class="cert-message">
+            تقديرًا لإتمامه رحلة <strong>سورة الناس</strong> واجتيازه محطات التعلم والأنشطة بنجاح.
+          </p>
+
+          <div class="certificate-badges">
+            <div><span>⭐</span><strong id="certificateStars">0</strong><small>نجمة</small></div>
+            <div><span>✅</span><strong id="certificateQuizScore">0</strong><small>الاختبار</small></div>
+            <div><span>🏆</span><strong>مكتملة</strong><small>رحلة سورة الناس</small></div>
+          </div>
+
+          <div class="certificate-footer">
+            <div>
+              <small>تاريخ الإنجاز</small>
+              <strong id="certificateDate"></strong>
+            </div>
+            <div class="certificate-seal">
+              <span>🌟</span>
+              <strong>أحسنت</strong>
+            </div>
+            <div>
+              <small>المنصة</small>
+              <strong>رحلتي مع القرآن</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="certificate-actions no-print">
+        <button type="button" class="primary-btn" id="printCertificate">🖨️ طباعة الشهادة</button>
+        <button type="button" class="secondary-btn" id="finishCertificate">⭐ إنهاء الرحلة</button>
+        <button value="close" class="secondary-btn">العودة للرئيسية</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="infoDialog" class="journey-dialog">
+    <form method="dialog" class="dialog-card compact">
+      <button class="close-btn" aria-label="إغلاق">✕</button>
+      <h2 id="infoTitle">قريبًا</h2>
+      <p id="infoText">سيتم بناء هذا القسم في المرحلة التالية.</p>
+      <button value="close" class="primary-btn">حسنًا</button>
+    </form>
+  </dialog>
+
+  <audio id="audioPlayer" preload="none"></audio>
+  <audio id="repeatAudioPlayer" preload="none"></audio>
+  <script src="data/generated-bundle.js"></script>
+  <script src="data/loader.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

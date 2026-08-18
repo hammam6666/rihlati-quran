@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "surahs": [
+    {
+      "id": "an-nas",
+      "number": 114,
+      "title": "الناس",
+      "fullTitle": "سورة الناس",
+      "icon": "📖",
+      "color": "linear-gradient(135deg,#e8f8ff,#bdefff)",
+      "unlocked": true,
+      "file": "surahs/114-an-nas.json"
+    },
+    {
+      "id": "al-falaq",
+      "number": 113,
+      "title": "الفلق",
+      "fullTitle": "سورة الفلق",
+      "icon": "🌙",
+      "color": "linear-gradient(135deg,#18395a,#35577a)",
+      "unlocked": true,
+      "file": "surahs/113-al-falaq.json"
+    },
+    {
+      "id": "al-ikhlas",
+      "number": 112,
+      "title": "الإخلاص",
+      "fullTitle": "سورة الإخلاص",
+      "icon": "✨",
+      "color": "linear-gradient(135deg,#c9a9ff,#7b61bd)",
+      "unlocked": true,
+      "file": "surahs/112-al-ikhlas.json"
+    },
+    {
+  "id": "al-masad",
+  "number": 111,
+  "title": "المسد",
+  "fullTitle": "سورة المسد",
+  "icon": "🔥",
+  "color": "linear-gradient(135deg,#f6b26b,#c85b3c)",
+  "unlocked": true,
+  "file": "surahs/111-al-masad.json"
+},
+ {
+      "id": "al-nasr",
+      "number": 110,
+      "title": "النصر",
+      "fullTitle": "سورة النصر",
+      "icon": "🕌",
+      "color": "linear-gradient(135deg,#79d9c1,#3a9e86)",
+      "unlocked": true,
+      "file": "surahs/110-al-nasr.json"
+    },
+    {
+      "id": "Al-Kafirun",
+      "number": 109,
+      "title": "الكافرون",
+      "fullTitle": "سورة الكافرون",
+      "icon": "🕌",
+      "color": "linear-gradient(135deg,#79d9c1,#3a9e86)",
+      "unlocked": true,
+      "file": "surahs/109-Al-Kafirun.json"
+    },
+    {
+      "id": "al-fath",
+      "number": 48,
+      "title": "الفتح",
+      "fullTitle": "سورة الفتح",
+      "icon": "☀️",
+      "color": "linear-gradient(135deg,#f3c68f,#c98850)",
+      "unlocked": false,
+      "file": "surahs/048-al-fath.json"
+    }
+  ]
+}
