@@ -62,6 +62,36 @@
       "file": "surahs/109-Al-Kafirun.json"
     },
     {
+      "id": "Al-Kawthar",
+      "number": 108,
+      "title": "الكوثر ",
+      "fullTitle": "سورة الكوثر",
+      "icon": "🕌",
+      "color": "linear-gradient(135deg,#79d9c1,#3a9e86)",
+      "unlocked": true,
+      "file": "surahs/108-Al-Kawthar.json"
+    },
+    {
+      "id": "Al-Ma'un",
+      "number": 107,
+      "title": "الماعون ",
+      "fullTitle": "سورة الماعون",
+      "icon": "🕌",
+      "color": "linear-gradient(135deg,#79d9c1,#3a9e86)",
+      "unlocked": true,
+      "file": "surahs/107-Al-Ma'un.json"
+    },
+    {
+      "id": "Quraysh",
+      "number": 106,
+      "title": "قريش ",
+      "fullTitle": "سورة قريش",
+      "icon": "🕌",
+      "color": "linear-gradient(135deg,#79d9c1,#3a9e86)",
+      "unlocked": true,
+      "file": "surahs/106-Quraysh.json"
+    },
+    {
       "id": "al-fath",
       "number": 48,
       "title": "الفتح",

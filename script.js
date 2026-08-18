@@ -138,11 +138,18 @@ function updateDynamicSurahLabels(){
     else if(t.includes("أختبر نفسي")) h.textContent=`أختبر نفسي — ${s.fullTitle}`;
   });
 
-  const previewTitle=document.querySelector(".journey-preview .section-head h3");
-  if(previewTitle) previewTitle.textContent=`محطات رحلة ${s.fullTitle}`;
+   const previewTitle = document.querySelector(".journey-preview .section-head h3");
+  if(previewTitle)
+    previewTitle.textContent = `محطات رحلة ${s.fullTitle}`;
 
-  const certMsg=document.querySelector(".cert-message");
-  if(certMsg) certMsg.innerHTML=`تقديرًا لإتمامه رحلة <strong>${s.fullTitle}</strong> واجتيازه محطات التعلم والأنشطة بنجاح.`;
+  const certMsg = document.querySelector(".cert-message");
+  if(certMsg)
+    certMsg.innerHTML = `تقديرًا لإتمامه رحلة <strong>${s.fullTitle}</strong> واجتيازه محطات التعلم والأنشطة بنجاح.`;
+
+  // رسالة إتمام محطة أستمع وأقرأ
+  const listenCompleteTitle = document.querySelector("#listenCompleteTitle");
+  if(listenCompleteTitle)
+    listenCompleteTitle.textContent = `رائع! أتممت آيات ${s.fullTitle}`;
 }
 
 function renderStats(){
