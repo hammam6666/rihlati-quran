@@ -92,6 +92,16 @@
       "file": "surahs/106-Quraysh.json"
     },
     {
+      "id": "Al-Fil",
+      "number": 105,
+      "title": "الفيل ",
+      "fullTitle": "سورة الفيل",
+      "icon": "🕌",
+      "color": "linear-gradient(135deg,#79d9c1,#3a9e86)",
+      "unlocked": true,
+      "file": "surahs/105-Al-Fil.json"
+    },
+    {
       "id": "al-fath",
       "number": 48,
       "title": "الفتح",

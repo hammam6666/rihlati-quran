@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>منشئ ومحرر ملفات السور — رحلتي مع القرآن</title>
+<style>
+:root{
+  --green:#0f6b3d;--blue:#173f78;--gold:#e5b43a;--ink:#13223a;--muted:#6e7b88;
+  --line:#dfe6ec;--bg:#f6fafc;--white:#fff;--danger:#a83731;--ok:#2a8b4a;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Tahoma,Arial,sans-serif;background:linear-gradient(180deg,#eef8ff,#fffaf0);color:var(--ink)}
+.wrap{max-width:1240px;margin:auto;padding:22px}
+header{
+  background:#fff;border:1px solid var(--line);border-radius:22px;padding:20px 22px;
+  display:flex;justify-content:space-between;align-items:center;gap:16px;box-shadow:0 12px 30px rgba(30,55,75,.08)
+}
+h1{margin:0;color:var(--green);font-size:28px}
+header p{margin:6px 0 0;color:var(--muted)}
+.badge{background:#fff4c8;color:#765600;border:1px solid #ead277;border-radius:999px;padding:8px 13px;font-weight:700}
+.top-actions,.tabs,.actions{display:flex;gap:9px;flex-wrap:wrap;margin:16px 0}
+.btn{border:0;border-radius:13px;padding:10px 15px;font:inherit;font-weight:700;cursor:pointer}
+.primary{background:var(--green);color:#fff}
+.secondary{background:#eef4f8;color:var(--blue);border:1px solid #d5e0e8}
+.gold{background:#f7c94c;color:#5f4500}
+.danger{background:#fff0ef;color:var(--danger);border:1px solid #efcbc8}
+.ok{background:#e9f8ee;color:#176537;border:1px solid #bfe0c9}
+.notice{
+  margin:16px 0;background:#eef8ff;border:1px solid #cfe4f3;border-radius:18px;padding:15px 17px;line-height:1.8
+}
+.status{
+  display:flex;justify-content:space-between;gap:12px;align-items:center;
+  background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px 14px;margin:12px 0
+}
+.status strong{color:var(--blue)} .status small{color:var(--muted)}
+.dirty{color:#a76e00!important}.saved{color:var(--ok)!important}
+.tabs button{border:1px solid var(--line);background:#fff;border-radius:14px;padding:11px 16px;font-weight:700;cursor:pointer}
+.tabs button.active{background:var(--blue);color:white;border-color:var(--blue)}
+.panel{display:none;background:#fff;border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 10px 26px rgba(30,55,75,.06)}
+.panel.active{display:block}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.section-head h2{margin:0;color:var(--blue);font-size:23px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.field label{display:block;font-weight:700;margin-bottom:6px}
+.field input,.field textarea,.field select{
+  width:100%;border:1px solid #ccd8e2;border-radius:13px;padding:11px 12px;font:inherit;background:#fff
+}
+.field textarea{min-height:86px;resize:vertical}
+.full{grid-column:1/-1}
+.row-card{
+  border:1px solid var(--line);border-radius:18px;padding:15px;margin-bottom:12px;background:#fbfdff
+}
+.row-card.dragging{opacity:.45}
+.row-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px}
+.row-top strong{color:var(--blue)}
+.row-tools{display:flex;gap:6px;flex-wrap:wrap}
+.icon-btn{border:1px solid #d7e1e8;background:#fff;border-radius:10px;padding:7px 9px;cursor:pointer}
+.summary{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}
+.summary div{background:#f7fafc;border:1px solid var(--line);border-radius:15px;padding:13px;text-align:center}
+.summary strong{display:block;font-size:22px;color:var(--blue)}
+pre{
+  direction:ltr;text-align:left;background:#0f1d2d;color:#d9efff;border-radius:17px;padding:16px;
+  overflow:auto;max-height:440px;font-family:Consolas,monospace;font-size:13px
+}
+.help{color:var(--muted);font-size:13px;line-height:1.7}
+.validation{border-radius:15px;padding:12px 14px;margin:12px 0;display:none}
+.validation.show{display:block}.validation.good{background:#edf9f0;border:1px solid #badfc5;color:#1f6a39}
+.validation.bad{background:#fff0ef;border:1px solid #efcac6;color:#963b34}
+input[type=file]{display:none}
+.basmala-row{background:linear-gradient(135deg,#fffdf0,#f3fbf5);border-color:#d9bd55}
+.basmala-row .ayahText{font-family:"Traditional Arabic","Noto Naskh Arabic","Amiri",serif;font-size:24px;text-align:center;color:#0f6b3d}
+footer{text-align:center;color:var(--muted);padding:18px}
+@media(max-width:760px){.grid,.summary{grid-template-columns:1fr}.wrap{padding:10px}header{display:block}.badge{display:inline-block;margin-top:10px}.status{display:block}}
+
+.identity-preview-wrap{display:flex;gap:18px;align-items:center;background:#f8fbfd;border:1px solid var(--line);border-radius:18px;padding:16px}
+.identity-preview{width:110px;height:110px;display:grid;place-items:center;filter:drop-shadow(0 8px 12px rgba(0,0,0,.12))}
+.identity-preview span{font-size:46px}
+.shape-circle{border-radius:50%}.shape-rounded{border-radius:26px}
+.shape-hexagon{clip-path:polygon(25% 6%,75% 6%,100% 50%,75% 94%,25% 94%,0 50%)}
+.shape-octagon{clip-path:polygon(30% 0,70% 0,100% 30%,100% 70%,70% 100%,30% 100%,0 70%,0 30%)}
+.shape-diamond{clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+.shape-shield{clip-path:polygon(8% 5%,92% 5%,92% 58%,76% 82%,50% 100%,24% 82%,8% 58%)}
+.shape-arch{border-radius:55px 55px 22px 22px}
+.shape-star8{clip-path:polygon(50% 0,62% 22%,85% 15%,78% 38%,100% 50%,78% 62%,85% 85%,62% 78%,50% 100%,38% 78%,15% 85%,22% 62%,0 50%,22% 38%,15% 15%,38% 22%)}
+.shape-seal{border-radius:50%;outline:6px double rgba(255,255,255,.65);outline-offset:-10px}
+.shape-pill{border-radius:999px;width:140px}
+.icon-picker-dialog{border:0;background:transparent;width:min(760px,94vw)}
+.icon-picker-dialog::backdrop{background:rgba(14,28,42,.55);backdrop-filter:blur(4px)}
+.icon-picker-card{background:#fff;border-radius:24px;padding:20px;box-shadow:0 24px 60px rgba(0,0,0,.22)}
+.icon-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;max-height:55vh;overflow:auto}
+.icon-choice{border:1px solid #d8e1e7;background:#fff;border-radius:13px;padding:10px;font-size:25px;cursor:pointer}
+.icon-choice:hover{background:#eef8f2;border-color:#8bc99d}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <h1>📖 منشئ ومحرر ملفات السور</h1>
+    <p>أنشئ سورة جديدة أو افتح أي ملف JSON سابق، عدّله، ثم احفظ نسخة محدثة.</p>
+  </div>
+  <div class="badge">RTL • يعمل بدون إنترنت</div>
+</header>
+
+<div class="top-actions">
+  <button class="btn primary" id="newBtn">➕ سورة جديدة</button>
+  <button class="btn secondary" id="openBtn">📂 فتح ملف سورة موجود</button>
+  <button class="btn gold" id="saveBtn">💾 حفظ نسخة معدلة</button>
+  <button class="btn secondary" id="validateBtn">✅ فحص الملف</button>
+</div>
+<input id="filePicker" type="file" accept=".json,application/json">
+
+<div class="status">
+  <div><strong id="fileStatus">ملف جديد</strong><small id="fileName"></small></div>
+  <div><strong id="saveState" class="saved">لا توجد تعديلات غير محفوظة</strong></div>
+</div>
+
+<div class="notice">
+  <strong>التحرير أصبح مباشرًا:</strong> افتح ملف السورة الذي أنشأته سابقًا، ستظهر كل بياناته في النموذج، عدّل الآيات أو الأسئلة أو الأنشطة، أضف واحذف ورتب العناصر، ثم احفظ نسخة JSON جديدة.
+</div>
+
+<div class="validation" id="validationBox"></div>
+
+<div class="tabs" id="tabs">
+  <button class="active" data-tab="basic">1. بيانات السورة</button>
+  <button data-tab="ayat">2. الآيات</button>
+  <button data-tab="understand">3. أفهم</button>
+  <button data-tab="matching">4. أطابق</button>
+  <button data-tab="practice">5. أتدرب</button>
+  <button data-tab="quiz">6. أختبر نفسي</button>
+  <button data-tab="export">7. التصدير</button>
+</div>
+
+<section class="panel active" id="basic">
+  <div class="section-head"><h2>بيانات السورة</h2></div>
+  <div class="grid">
+    <div class="field"><label>رقم السورة</label><input id="number" type="number" min="1" max="114" placeholder="مثال: 110"></div>
+    <div class="field"><label>اسم السورة</label><input id="title" placeholder="مثال: النصر"></div>
+    <div class="field"><label>المعرف الإنجليزي ID</label><input id="id" placeholder="مثال: an-nasr"></div>
+    <div class="field"><label>مجلد الصوت</label><input id="audioFolder" placeholder="مثال: 110"></div>
+    <div class="field"><label>أيقونة السورة</label>
+      <div style="display:flex;gap:8px">
+        <input id="icon" value="📖" readonly>
+        <button class="btn secondary" type="button" id="chooseIconBtn">🎨 اختر</button>
+      </div>
+    </div>
+    <div class="field"><label>شكل إطار الأيقونة</label>
+      <select id="shape">
+        <option value="circle">دائرة</option><option value="rounded">مربع دائري</option>
+        <option value="hexagon">سداسي</option><option value="octagon">ثماني</option>
+        <option value="diamond">ماسة</option><option value="shield">درع</option>
+        <option value="arch">قوس</option><option value="star8">نجمة ثمانية</option>
+        <option value="seal">ختم</option><option value="pill">بيضاوي</option>
+      </select>
+    </div>
+    <div class="field full"><label>لون/تدرج البطاقة</label><input id="color" value="linear-gradient(135deg,#79d9c1,#3a9e86)"></div>
+    <div class="field full"><label>معاينة هوية السورة</label>
+      <div class="identity-preview-wrap">
+        <div class="identity-preview shape-circle" id="identityPreview"><span id="identityPreviewIcon">📖</span></div>
+        <div><strong id="identityPreviewTitle">هوية السورة</strong>
+        <div class="help">لكل سورة هوية مستقلة من الأيقونة + الشكل + اللون.</div>
+        <button class="btn secondary" type="button" id="autoIdentityBtn" style="margin-top:8px">✨ اقتراح تلقائي حسب رقم السورة</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="ayat">
+  <div class="section-head"><h2>الآيات</h2><div class="actions">
+      <button class="btn secondary" type="button" onclick="applyBasmalaSystem()">🕌 تطبيق نظام البسملة</button>
+      <button class="btn primary" type="button" onclick="addAyah()">+ إضافة آية</button>
+    </div></div>
+  <div class="notice" style="margin-top:0">
+      <strong>نظام الترقيم:</strong>
+      البسملة رقم <b>0</b> وملفها مثل <b>110000.mp3</b>،
+      ثم الآية الأولى رقم <b>1</b> وملفها <b>110001.mp3</b>،
+      ثم 2، 3… بالتتابع.
+    </div>
+    <div id="ayatRows"></div>
+</section>
+
+<section class="panel" id="understand">
+  <div class="section-head"><h2>أفهم</h2><button class="btn primary" onclick="addUnderstand()">+ إضافة بطاقة فهم</button></div>
+  <div id="understandRows"></div>
+</section>
+
+<section class="panel" id="matching">
+  <div class="section-head"><h2>أطابق</h2><button class="btn primary" onclick="addMatching()">+ إضافة مطابقة</button></div>
+  <div id="matchingRows"></div>
+</section>
+
+<section class="panel" id="practice">
+  <div class="section-head"><h2>أتدرب</h2><button class="btn primary" onclick="addPractice()">+ إضافة تدريب</button></div>
+  <div id="practiceRows"></div>
+</section>
+
+<section class="panel" id="quiz">
+  <div class="section-head"><h2>أختبر نفسي</h2><button class="btn primary" onclick="addQuiz()">+ إضافة سؤال</button></div>
+  <div id="quizRows"></div>
+</section>
+
+<section class="panel" id="export">
+  <div class="section-head"><h2>التصدير</h2></div>
+  <div class="summary">
+    <div><strong id="sumAyat">0</strong><span>آيات</span></div>
+    <div><strong id="sumUnderstand">0</strong><span>أفهم</span></div>
+    <div><strong id="sumMatch">0</strong><span>مطابقة</span></div>
+    <div><strong id="sumPractice">0</strong><span>تدريبات</span></div>
+    <div><strong id="sumQuiz">0</strong><span>أسئلة اختبار</span></div>
+  </div>
+  <div class="actions">
+    <button class="btn primary" onclick="generateJSON()">⚙️ توليد JSON</button>
+    <button class="btn gold" onclick="downloadJSON()">⬇️ تحميل ملف السورة</button>
+    <button class="btn secondary" onclick="copyIndexEntry()">📋 نسخ بطاقة index.json</button>
+  </div>
+  <p class="help">بعد حفظ الملف المعدل: استبدل به الملف القديم داخل <b>data/surahs/</b> ثم شغّل <b>build-data.bat</b>.</p>
+  <pre id="output">{ "message": "افتح ملفًا أو ابدأ سورة جديدة" }</pre>
+</section>
+
+<dialog id="iconPicker" class="icon-picker-dialog"><div class="icon-picker-card">
+<div class="section-head"><h2>اختر أيقونة السورة</h2><button type="button" class="btn secondary" id="closeIconPicker">إغلاق</button></div>
+<p class="help">المكتبة تحتوي على 114 هوية أيقونية مختلفة.</p><div id="iconGrid" class="icon-grid"></div></div></dialog><footer>رحلتي مع القرآن — منشئ ومحرر السور</footer>
+</div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+let lastJSON=null, currentFileName="", dirty=false;
+const SURAH_ICONS={"1": "🕋", "2": "🌿", "3": "🌊", "4": "⛰️", "5": "☀️", "6": "🌙", "7": "⭐", "8": "✨", "9": "🌅", "10": "🌄", "11": "🌧️", "12": "🌩️", "13": "🌳", "14": "🌱", "15": "🌹", "16": "🍃", "17": "📖", "18": "📜", "19": "✒️", "20": "🧭", "21": "⚖️", "22": "🛡️", "23": "🏕️", "24": "🏠", "25": "🚪", "26": "🗺️", "27": "🤲", "28": "👥", "29": "🕊️", "30": "🐎", "31": "🐘", "32": "🐪", "33": "🐝", "34": "🐜", "35": "💧", "36": "🔥", "37": "💡", "38": "🌍", "39": "🕋✦", "40": "🌿✦", "41": "🌊✦", "42": "⛰️✦", "43": "☀️✦", "44": "🌙✦", "45": "⭐✦", "46": "✨✦", "47": "🌅✦", "48": "🌄✦", "49": "🌧️✦", "50": "🌩️✦", "51": "🌳✦", "52": "🌱✦", "53": "🌹✦", "54": "🍃✦", "55": "📖✦", "56": "📜✦", "57": "✒️✦", "58": "🧭✦", "59": "⚖️✦", "60": "🛡️✦", "61": "🏕️✦", "62": "🏠✦", "63": "🚪✦", "64": "🗺️✦", "65": "🤲✦", "66": "👥✦", "67": "🕊️✦", "68": "🐎✦", "69": "🐘✦", "70": "🐪✦", "71": "🐝✦", "72": "🐜✦", "73": "💧✦", "74": "🔥✦", "75": "💡✦", "76": "🌍✦", "77": "🕋◆", "78": "🌿◆", "79": "🌊◆", "80": "⛰️◆", "81": "☀️◆", "82": "🌙◆", "83": "⭐◆", "84": "✨◆", "85": "🌅◆", "86": "🌄◆", "87": "🌧️◆", "88": "🌩️◆", "89": "🌳◆", "90": "🌱◆", "91": "🌹◆", "92": "🍃◆", "93": "📖◆", "94": "📜◆", "95": "✒️◆", "96": "🧭◆", "97": "⚖️◆", "98": "🛡️◆", "99": "🏕️◆", "100": "🏠◆", "101": "🚪◆", "102": "🗺️◆", "103": "🤲◆", "104": "👥◆", "105": "🕊️◆", "106": "🐎◆", "107": "🐘◆", "108": "🐪◆", "109": "🐝◆", "110": "🐜◆", "111": "💧◆", "112": "🔥◆", "113": "💡◆", "114": "🌍◆"};
+const IDENTITY_SHAPES=["circle", "rounded", "hexagon", "octagon", "diamond", "shield", "arch", "star8", "seal", "pill"];
+const IDENTITY_GRADIENTS=["linear-gradient(135deg,#79d9c1,#3a9e86)", "linear-gradient(135deg,#8fd3f4,#4d8cc9)", "linear-gradient(135deg,#b38be3,#7153b6)", "linear-gradient(135deg,#f6b26b,#d96a43)", "linear-gradient(135deg,#f5d76e,#e9a91b)", "linear-gradient(135deg,#8ed081,#4d9b59)", "linear-gradient(135deg,#f6a7c1,#d56c95)", "linear-gradient(135deg,#a7c7e7,#668bb6)", "linear-gradient(135deg,#d7b98e,#a77b44)", "linear-gradient(135deg,#95ddd1,#4da89a)", "linear-gradient(135deg,#c9a7eb,#8a64c3)", "linear-gradient(135deg,#f3c68a,#d88b3d)"];
+
+
+function esc(v=""){return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");}
+function markDirty(){
+  dirty=true;
+  $("#saveState").textContent="هناك تعديلات غير محفوظة";
+  $("#saveState").className="dirty";
+}
+function markSaved(){
+  dirty=false;
+  $("#saveState").textContent="لا توجد تعديلات غير محفوظة";
+  $("#saveState").className="saved";
+}
+window.addEventListener("beforeunload",e=>{if(dirty){e.preventDefault();e.returnValue=""}});
+
+
+function suggestedIdentity(){
+ const n=Number($("#number").value)||1;
+ return {icon:SURAH_ICONS[String(n)]||"📖",shape:IDENTITY_SHAPES[(n-1)%IDENTITY_SHAPES.length],color:IDENTITY_GRADIENTS[(n-1)%IDENTITY_GRADIENTS.length]};
+}
+function updateIdentityPreview(){
+ const shape=$("#shape").value||"circle";
+ $("#identityPreviewIcon").textContent=$("#icon").value||"📖";
+ $("#identityPreview").className=`identity-preview shape-${shape}`;
+ $("#identityPreview").style.background=$("#color").value||IDENTITY_GRADIENTS[0];
+ $("#identityPreviewTitle").textContent=$("#title").value.trim()?`سورة ${$("#title").value.trim()}`:"هوية السورة";
+}
+function applySuggestedIdentity(){
+ const x=suggestedIdentity();$("#icon").value=x.icon;$("#shape").value=x.shape;$("#color").value=x.color;updateIdentityPreview();markDirty();
+}
+function openIconPicker(){
+ $("#iconGrid").innerHTML=Object.entries(SURAH_ICONS).map(([n,icon])=>`<button type="button" class="icon-choice" data-icon="${icon}" title="سورة رقم ${n}">${icon}</button>`).join("");
+ $$("#iconGrid .icon-choice").forEach(b=>b.onclick=()=>{$("#icon").value=b.dataset.icon;updateIdentityPreview();markDirty();$("#iconPicker").close()});
+ $("#iconPicker").showModal();
+}
+$("#tabs").addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;
+  $$("#tabs button").forEach(x=>x.classList.remove("active"));b.classList.add("active");
+  $$(".panel").forEach(x=>x.classList.remove("active"));$("#"+b.dataset.tab).classList.add("active");
+  updateSummary();
+});
+
+function field(label,cls,value="",type="text"){
+  const isAudio=cls==="ayahAudio";
+  return `<div class="field"><label>${label}</label><input class="${cls}" ${isAudio?'dir="ltr" style="text-align:left"':''} type="${type}" value="${esc(value)}"></div>`;
+}
+function textarea(label,cls,value=""){return `<div class="field full"><label>${label}</label><textarea class="${cls}">${esc(value)}</textarea></div>`}
+
+function tools(protectedRow=false){
+  if(protectedRow){
+    return `<div class="row-tools"><span class="ok" style="padding:7px 10px;border-radius:10px">🕌 البسملة ثابتة</span></div>`;
+  }
+  return `<div class="row-tools">
+    <button type="button" class="icon-btn" title="لأعلى" onclick="moveCard(this,-1)">⬆️</button>
+    <button type="button" class="icon-btn" title="لأسفل" onclick="moveCard(this,1)">⬇️</button>
+    <button type="button" class="icon-btn" title="نسخ" onclick="duplicateCard(this)">📄</button>
+    <button type="button" class="icon-btn danger" title="حذف" onclick="removeCard(this)">🗑️</button>
+  </div>`;
+}
+function removeCard(btn){btn.closest(".row-card").remove();renumber();markDirty()}
+function moveCard(btn,dir){
+  const card=btn.closest(".row-card"), parent=card.parentElement;
+  const target=dir<0?card.previousElementSibling:card.nextElementSibling;
+  if(!target)return;
+  if(dir<0) parent.insertBefore(card,target); else parent.insertBefore(target,card);
+  renumber();markDirty();
+}
+function duplicateCard(btn){
+  const card=btn.closest(".row-card"), clone=card.cloneNode(true);
+  card.after(clone); bindInputs(clone); renumber();markDirty();
+}
+function bindInputs(root=document){
+  root.querySelectorAll("input,textarea,select").forEach(el=>{
+    if(el.dataset.bound)return;
+    el.dataset.bound="1";
+    el.addEventListener("input",markDirty);
+    el.addEventListener("change",markDirty);
+  });
+}
+function renumber(){
+  $$("#ayatRows .row-card").forEach((r,i)=>{
+    r.dataset.n=i;
+    const isB=i===0 && isBasmalaText(r.querySelector(".ayahText")?.value||"");
+    r.classList.toggle("basmala-row",isB);
+    r.querySelector(".row-top strong").textContent=isB?"البسملة — رقم 0":`الآية ${i}`;
+  });
+  [["understandRows","بطاقة فهم"],["matchingRows","مطابقة"],["practiceRows","تدريب"],["quizRows","سؤال"]].forEach(([id,label])=>{
+    $("#"+id).querySelectorAll(".row-card").forEach((r,i)=>{r.dataset.n=i+1;r.querySelector(".row-top strong").textContent=`${label} ${i+1}`});
+  });
+  updateSummary();
+}
+
+const BASMALA_TEXT="بسم الله الرحمن الرحيم";
+
+/*
+  نظام الترقيم المعتمد:
+  البسملة = 0  -> 110000.mp3
+  الآية 1     -> 110001.mp3
+  الآية 2     -> 110002.mp3
+*/
+function defaultAyahAudio(n){
+ const folder=$("#audioFolder").value.trim() || String($("#number").value||"").padStart(3,"0") || "000";
+ return `${folder}${String(Number(n)||0).padStart(3,"0")}.mp3`;
+}
+function isBasmalaText(text=""){
+ const clean=String(text).replace(/[ًٌٍَُِّْٰـ\s]/g,"");
+ return clean.includes("بسماللهالرحمنالرحيم");
+}
+function addAyah(data={}){
+ const n=$$("#ayatRows .row-card").length; // أول صف = 0
+ const isBasmala=n===0 && (data.forceBasmala || !data.text || isBasmalaText(data.text));
+ const ayahText=isBasmala ? BASMALA_TEXT : (data.text||"");
+ const filename=data.audio || defaultAyahAudio(n);
+
+ $("#ayatRows").insertAdjacentHTML("beforeend",`<div class="row-card ${isBasmala?"basmala-row":""}" data-n="${n}">
+   <div class="row-top"><strong>${isBasmala?"البسملة — رقم 0":`الآية ${n}`}</strong>${tools(isBasmala)}</div>
+   <div class="grid">${textarea("نص الآية","ayahText",ayahText)}${field("اسم ملف الصوت","ayahAudio",filename)}</div>
+ </div>`);
+
+ const row=$("#ayatRows").lastElementChild;
+ if(isBasmala){
+   row.querySelector(".ayahText").readOnly=true;
+   row.querySelector(".ayahAudio").dataset.auto="1";
+ }
+ bindInputs(row);updateSummary();markDirty();
+}
+function refreshAyahAudioNames(){
+ $$("#ayatRows .row-card").forEach((row,i)=>{
+   const audio=row.querySelector(".ayahAudio");
+   if(audio) audio.value=defaultAyahAudio(i);
+ });
+}
+function applyBasmalaSystem(){
+ const rows=$$("#ayatRows .row-card");
+ if(!rows.length){
+   addAyah({forceBasmala:true,text:BASMALA_TEXT,audio:defaultAyahAudio(0)});
+   return;
+ }
+ const firstText=rows[0].querySelector(".ayahText")?.value||"";
+ if(!isBasmalaText(firstText)){
+   const holder=document.createElement("div");
+   holder.innerHTML=`<div class="row-card basmala-row" data-n="0">
+     <div class="row-top"><strong>البسملة — رقم 0</strong>${tools(true)}</div>
+     <div class="grid">${textarea("نص الآية","ayahText",BASMALA_TEXT)}${field("اسم ملف الصوت","ayahAudio",defaultAyahAudio(0))}</div>
+   </div>`;
+   $("#ayatRows").prepend(holder.firstElementChild);
+   const r=$("#ayatRows").firstElementChild;
+   r.querySelector(".ayahText").readOnly=true;
+   bindInputs(r);
+ }
+ renumber();
+ refreshAyahAudioNames();
+ markDirty();
+}
+function addUnderstand(data={}){
+ const n=$$("#understandRows .row-card").length+1,ch=data.choices||[],c=Number(data.correct||0),wrong=ch.filter((_,i)=>i!==c);
+ $("#understandRows").insertAdjacentHTML("beforeend",`<div class="row-card" data-n="${n}">
+  <div class="row-top"><strong>بطاقة فهم ${n}</strong>${tools()}</div>
+  <div class="grid">
+   ${field("رقم الآية","uN",data.n ?? n,"number")}${field("الأيقونة","uIcon",data.icon||"💡")}
+   ${textarea("المعنى المبسط","uMeaning",data.meaning||"")}${textarea("السؤال","uQ",data.q||"")}
+   ${field("الإجابة الصحيحة","uC1",ch[c]||"")}${field("إجابة أخرى","uC2",wrong[0]||"")}
+  </div></div>`);
+ bindInputs($("#understandRows").lastElementChild);updateSummary();markDirty();
+}
+function addMatching(data={}){
+ const n=$$("#matchingRows .row-card").length+1,op=data.options||[],c=Number(data.correct||0),wrong=op.filter((_,i)=>i!==c);
+ $("#matchingRows").insertAdjacentHTML("beforeend",`<div class="row-card" data-n="${n}">
+  <div class="row-top"><strong>مطابقة ${n}</strong>${tools()}</div>
+  <div class="grid">
+   ${field("الأيقونة","mIcon",data.icon||"🧩")}${field("الكلمة/العبارة","mPrompt",data.prompt||"")}
+   ${field("الإجابة الصحيحة","mC1",op[c]||"")}${field("خيار 2","mC2",wrong[0]||"")}${field("خيار 3","mC3",wrong[1]||"")}
+  </div></div>`);
+ bindInputs($("#matchingRows").lastElementChild);updateSummary();markDirty();
+}
+function addPractice(data={}){
+ const n=$$("#practiceRows .row-card").length+1,ch=data.choices||[],c=Number(data.correct||0),wrong=ch.filter((_,i)=>i!==c);
+ $("#practiceRows").insertAdjacentHTML("beforeend",`<div class="row-card" data-n="${n}">
+  <div class="row-top"><strong>تدريب ${n}</strong>${tools()}</div>
+  <div class="grid">
+   ${field("نوع النشاط","pType",data.type||"اختيار")}${field("الأيقونة","pIcon",data.icon||"🎯")}
+   ${textarea("السؤال","pQ",data.q||"")}
+   ${field("الإجابة الصحيحة","pC1",ch[c]||"")}${field("خيار 2","pC2",wrong[0]||"")}${field("خيار 3","pC3",wrong[1]||"")}
+  </div></div>`);
+ bindInputs($("#practiceRows").lastElementChild);updateSummary();markDirty();
+}
+function addQuiz(data={}){
+ const n=$$("#quizRows .row-card").length+1,ch=data.choices||[],c=Number(data.correct||0),wrong=ch.filter((_,i)=>i!==c);
+ $("#quizRows").insertAdjacentHTML("beforeend",`<div class="row-card" data-n="${n}">
+  <div class="row-top"><strong>سؤال ${n}</strong>${tools()}</div>
+  <div class="grid">
+   ${field("نوع السؤال","qType",data.type||"اختيار")}${field("الأيقونة","qIcon",data.icon||"✅")}
+   ${textarea("السؤال","qQ",data.q||"")}
+   ${field("الإجابة الصحيحة","qC1",ch[c]||"")}${field("خيار 2","qC2",wrong[0]||"")}${field("خيار 3","qC3",wrong[1]||"")}
+  </div></div>`);
+ bindInputs($("#quizRows").lastElementChild);updateSummary();markDirty();
+}
+
+function vals(row,classes){return Object.fromEntries(classes.map(c=>[c,row.querySelector("."+c)?.value.trim()||""]))}
+function buildObject(){
+ const number=Number($("#number").value),title=$("#title").value.trim(),id=$("#id").value.trim(),folder=$("#audioFolder").value.trim();
+ const o={id,number,title,fullTitle:title?`سورة ${title}`:"",audioFolder:folder,icon:$("#icon").value.trim()||"📖",shape:$("#shape").value||"circle",color:$("#color").value.trim(),ayat:[],understand:[],matching:[],practice:[],quiz:[]};
+ $$("#ayatRows .row-card").forEach((r,i)=>{let v=vals(r,["ayahText","ayahAudio"]);o.ayat.push({n:i,text:v.ayahText,audio:v.ayahAudio})});
+ $$("#understandRows .row-card").forEach((r,i)=>{let v=vals(r,["uN","uIcon","uMeaning","uQ","uC1","uC2"]);o.understand.push({n:v.uN===""?i:Number(v.uN),icon:v.uIcon,meaning:v.uMeaning,q:v.uQ,choices:[v.uC1,v.uC2].filter(Boolean),correct:0})});
+ $$("#matchingRows .row-card").forEach((r,i)=>{let v=vals(r,["mIcon","mPrompt","mC1","mC2","mC3"]);o.matching.push({id:i+1,icon:v.mIcon,prompt:v.mPrompt,options:[v.mC1,v.mC2,v.mC3].filter(Boolean),correct:0})});
+ $$("#practiceRows .row-card").forEach((r,i)=>{let v=vals(r,["pType","pIcon","pQ","pC1","pC2","pC3"]);o.practice.push({id:i+1,type:v.pType,icon:v.pIcon,q:v.pQ,choices:[v.pC1,v.pC2,v.pC3].filter(Boolean),correct:0})});
+ $$("#quizRows .row-card").forEach((r,i)=>{let v=vals(r,["qType","qIcon","qQ","qC1","qC2","qC3"]);o.quiz.push({id:i+1,type:v.qType,icon:v.qIcon,q:v.qQ,choices:[v.qC1,v.qC2,v.qC3].filter(Boolean),correct:0})});
+ return o;
+}
+function generateJSON(){
+ lastJSON=buildObject();$("#output").textContent=JSON.stringify(lastJSON,null,2);updateSummary();return lastJSON;
+}
+function validateObject(){
+ const o=buildObject(),errors=[];
+ if(!o.number||o.number<1||o.number>114)errors.push("رقم السورة غير صحيح.");
+ if(!o.title)errors.push("اسم السورة مطلوب.");
+ if(!o.id)errors.push("ID مطلوب.");
+ if(!o.audioFolder)errors.push("مجلد الصوت مطلوب.");
+ if(!o.ayat.length)errors.push("يجب إدخال آية واحدة على الأقل.");
+ if(o.ayat.length && !isBasmalaText(o.ayat[0].text))errors.push("الآية الأولى يجب أن تكون: بسم الله الرحمن الرحيم.");
+ if(o.ayat.length && o.ayat[0].audio !== defaultAyahAudio(0))errors.push(`ملف صوت البسملة يجب أن يكون ${defaultAyahAudio(0)}.`);
+ o.ayat.forEach((a,i)=>{
+   const label=i===0?"البسملة":`الآية ${i}`;
+   if(!a.text)errors.push(`نص ${label} فارغ.`);
+   if(!a.audio)errors.push(`ملف صوت ${label} فارغ.`);
+   const expected=defaultAyahAudio(i);
+   if(a.audio && a.audio!==expected)errors.push(`اسم ملف صوت ${label} يجب أن يكون ${expected}.`);
+ });
+ [["أفهم",o.understand],["أطابق",o.matching],["أتدرب",o.practice],["الاختبار",o.quiz]].forEach(([label,arr])=>{
+   arr.forEach((x,i)=>{
+     const q=x.q||x.prompt;
+     if(!q)errors.push(`${label} رقم ${i+1}: السؤال/العبارة فارغة.`);
+     const opts=x.choices||x.options||[];
+     if(opts.length<2)errors.push(`${label} رقم ${i+1}: يحتاج خيارين على الأقل.`);
+   });
+ });
+ const box=$("#validationBox");
+ box.className="validation show "+(errors.length?"bad":"good");
+ box.innerHTML=errors.length?`<strong>وجدت ${errors.length} ملاحظة:</strong><br>${errors.map(x=>"• "+x).join("<br>")}`:"<strong>✅ الملف سليم مبدئيًا وجاهز للحفظ.</strong>";
+ return errors.length===0;
+}
+function downloadJSON(){
+ if(!validateObject())return;
+ const obj=generateJSON();
+ const name=`${String(obj.number).padStart(3,"0")}-${obj.id}.json`;
+ const blob=new Blob([JSON.stringify(obj,null,2)],{type:"application/json;charset=utf-8"});
+ const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href);
+ currentFileName=name;$("#fileName").textContent=name;$("#fileStatus").textContent="تم تجهيز نسخة محدثة";markSaved();
+}
+async function copyIndexEntry(){
+ const obj=generateJSON();if(!obj.id||!obj.number)return;
+ const entry={id:obj.id,number:obj.number,title:obj.title,fullTitle:obj.fullTitle,icon:obj.icon,shape:obj.shape,color:obj.color,unlocked:true,file:`surahs/${String(obj.number).padStart(3,"0")}-${obj.id}.json`};
+ const txt=JSON.stringify(entry,null,2);
+ try{await navigator.clipboard.writeText(txt);alert("تم نسخ بطاقة السورة.")}catch{$("#output").textContent=txt}
+}
+function clearRows(){["ayatRows","understandRows","matchingRows","practiceRows","quizRows"].forEach(id=>$("#"+id).innerHTML="")}
+function newFile(){
+ if(dirty&&!confirm("هناك تعديلات غير محفوظة. هل تريد بدء ملف جديد؟"))return;
+ clearRows();$("#number").value="";$("#title").value="";$("#id").value="";$("#audioFolder").value="";$("#icon").value="📖";$("#shape").value="circle";$("#color").value="linear-gradient(135deg,#79d9c1,#3a9e86)";
+ currentFileName="";$("#fileStatus").textContent="ملف جديد";$("#fileName").textContent="";$("#output").textContent='{ "message": "ابدأ إدخال بيانات السورة" }';$("#validationBox").className="validation";addAyah({forceBasmala:true,text:BASMALA_TEXT,audio:defaultAyahAudio(0)});dirty=false;markDirty();
+}
+function populate(o,filename=""){
+ clearRows();
+ $("#number").value=o.number||"";$("#title").value=o.title||"";$("#id").value=o.id||"";$("#audioFolder").value=o.audioFolder||String(o.number||"").padStart(3,"0");$("#icon").value=o.icon||SURAH_ICONS[String(o.number)]||"📖";$("#shape").value=o.shape||IDENTITY_SHAPES[((Number(o.number)||1)-1)%IDENTITY_SHAPES.length];$("#color").value=o.color||IDENTITY_GRADIENTS[((Number(o.number)||1)-1)%IDENTITY_GRADIENTS.length];
+
+ const ayat=[...(o.ayat||[])];
+ ayat.forEach((a,i)=>addAyah({...a,n:i,audio:defaultAyahAudio(i)}));
+
+ (o.understand||[]).forEach(addUnderstand);(o.matching||[]).forEach(addMatching);(o.practice||[]).forEach(addPractice);(o.quiz||[]).forEach(addQuiz);
+ renumber();refreshAyahAudioNames();
+ currentFileName=filename;$("#fileStatus").textContent="ملف مفتوح للتعديل";$("#fileName").textContent=filename;
+ generateJSON();markSaved();updateSummary();
+}
+function openJSONFile(){$("#filePicker").click()}
+$("#filePicker").addEventListener("change",e=>{
+ const file=e.target.files[0];if(!file)return;
+ const r=new FileReader();
+ r.onload=()=>{try{
+   const o=JSON.parse(r.result);
+   if((o.ayat||[]).length && !isBasmalaText(o.ayat[0]?.text||"")){
+     if(confirm("هذا الملف لا يبدأ بالبسملة. هل تريد إضافة «بسم الله الرحمن الرحيم» كآية أولى وتحديث ترقيم ملفات الصوت؟")){
+       const folder=o.audioFolder||String(o.number).padStart(3,"0");
+       o.ayat.unshift({n:0,text:BASMALA_TEXT,audio:`${folder}000.mp3`});
+       o.ayat=o.ayat.map((a,i)=>({...a,n:i,audio:`${folder}${String(i).padStart(3,"0")}.mp3`}));
+     }
+   }
+   populate(o,file.name)
+ }catch{alert("ملف JSON غير صالح.")}};
+ r.readAsText(file,"utf-8");e.target.value="";
+});
+function updateSummary(){
+ $("#sumAyat").textContent=$$("#ayatRows .row-card").length;
+ $("#sumUnderstand").textContent=$$("#understandRows .row-card").length;
+ $("#sumMatch").textContent=$$("#matchingRows .row-card").length;
+ $("#sumPractice").textContent=$$("#practiceRows .row-card").length;
+ $("#sumQuiz").textContent=$$("#quizRows .row-card").length;
+}
+$("#newBtn").onclick=newFile;$("#openBtn").onclick=openJSONFile;$("#saveBtn").onclick=downloadJSON;$("#validateBtn").onclick=validateObject;
+$("#audioFolder").addEventListener("change",refreshAyahAudioNames);
+$("#number").addEventListener("change",()=>{
+  if(!$("#audioFolder").value.trim()) $("#audioFolder").value=String($("#number").value||"").padStart(3,"0");
+  refreshAyahAudioNames();
+});
+$("#chooseIconBtn").onclick=openIconPicker;
+$("#closeIconPicker").onclick=()=>$("#iconPicker").close();
+$("#autoIdentityBtn").onclick=applySuggestedIdentity;
+$("#shape").addEventListener("change",()=>{updateIdentityPreview();markDirty()});
+$("#color").addEventListener("input",()=>{updateIdentityPreview();markDirty()});
+$("#title").addEventListener("input",updateIdentityPreview);
+$("#number").addEventListener("change",()=>{applySuggestedIdentity();updateIdentityPreview()});
+bindInputs(document);
+newFile();
+updateIdentityPreview();
+</script>
+</body>
+</html>
