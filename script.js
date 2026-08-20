@@ -40,9 +40,24 @@ function getStableShuffled(key, items, correctIndex){
 
 /* ===== الحالة العامة + ترحيل بيانات النسخ السابقة ===== */
 const state = JSON.parse(localStorage.getItem("rihlatiState") || "{}");
+
 state.studentName ??= "";
-state.activeSurahId ??= "an-nas";
 state.surahs ??= {};
+
+// قراءة السورة المطلوبة من الرابط
+const urlParams = new URLSearchParams(window.location.search);
+const requestedSurah = urlParams.get("surah");
+
+// الأولوية للسورة الموجودة في الرابط
+if (
+  requestedSurah &&
+  window.SURAH_LIBRARY &&
+  window.SURAH_LIBRARY[requestedSurah]
+) {
+  state.activeSurahId = requestedSurah;
+} else {
+  state.activeSurahId ??= "an-nas";
+}
 
 function blankSurahProgress(){
   return {
