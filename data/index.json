@@ -102,6 +102,56 @@
       "file": "surahs/105-Al-Fil.json"
     },
     {
+      "id": "Al-Humazah",
+      "number": 104,
+      "title": "الهمزة",
+      "fullTitle": "سورةالهمزة",
+      "icon": "🕌",
+      "color": "linear-gradient(135deg,#79d9c1,#3a9e86)",
+      "unlocked": true,
+      "file": "surahs/104-Al-Humazah.json"
+    },
+    {
+      "id": "Al-'Asr",
+      "number": 103,
+      "title": "العصر",
+      "fullTitle": "سورةالعصر",
+      "icon": "🕌",
+      "color": "linear-gradient(135deg,#79d9c1,#3a9e86)",
+      "unlocked": true,
+      "file": "surahs/103-Al-'Asr.json"
+    },
+    {
+      "id": "At-Takathur",
+      "number": 102,
+      "title": "التكاثر",
+      "fullTitle": "سورةالتكاثر",
+      "icon": "🕌",
+      "color": "linear-gradient(135deg,#79d9c1,#3a9e86)",
+      "unlocked": true,
+      "file": "surahs/102-At-Takathur.json"
+    },
+    {
+      "id": "Al-Qari'ah",
+      "number": 101,
+      "title": "القارعة",
+      "fullTitle": "سورةالقارعة",
+      "icon": "🕌",
+      "color": "linear-gradient(135deg,#79d9c1,#3a9e86)",
+      "unlocked": true,
+      "file": "surahs/101-Al-Qari'ah.json"
+    },
+    {
+      "id": "Al-'Adiyat",
+      "number": 100,
+      "title": "العاديات",
+      "fullTitle": "سورةالعاديات",
+      "icon": "🕌",
+      "color": "linear-gradient(135deg,#79d9c1,#3a9e86)",
+      "unlocked": true,
+      "file": "surahs/100-Al-'Adiyat.json"
+    },
+    {
       "id": "al-fath",
       "number": 48,
       "title": "الفتح",
